@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EgyptAir - Sign In</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/formEpic.css" />
+  </head>
+  <body>
+    <div class="form-container">
+      <h1 class="form-header">Sign In</h1>
+      <form class="form-class" action="signin.php" method="POST">
+        <div class="form-group">
+          <input type="text" name="username" placeholder="Username" required />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <input type="submit" name="submit" value="Sign In" />
+      </form>
+      <p>New user? <a href="signup.html">Create an account</a></p>
+    </div>
+  </body>
+</html>
