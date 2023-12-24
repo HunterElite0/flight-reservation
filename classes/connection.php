@@ -1,6 +1,6 @@
 <?php 
 
-    final class connection{
+    class connection{
         private $servername = "db";
         private $username = "root";
         private $password = "EGYPTAIR";
@@ -11,9 +11,6 @@
             return $conn;
         }
 
-        function destroy(){
-            mysqlnd_close($this->conn);
-        }
     }
 
 ?>
