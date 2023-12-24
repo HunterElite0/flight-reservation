@@ -6,6 +6,12 @@
         public function signIn($email, $password)
         {
             $conn = $this->getConnection();
+            $email = mysqli_real_escape_string($conn, $email);
+            $password = mysqli_real_escape_string($conn, $password);
+
+            if($email == '' || $password == '')
+                return;
+
             $query = "SELECT * FROM User WHERE email = '$email'";
             $result = mysqli_query($conn, $query);
             $resultArray = mysqli_fetch_assoc($result);
@@ -19,13 +25,12 @@
                 }
                 if($resultArray['account_type'] == '0'){
                     $this->setAccount($resultArray['id'], 'Company');
-                    header('Location: companyHome.php');
                 }else{
                     $this->setAccount($resultArray['id'], 'Passenger');
-                    header('Location: passengerHome.php');
                 }
 
             } else {
+                header("Location: ../signin.php");
                 echo "<script>alert('Invalid username or password')</script>";
             }
         }
@@ -51,12 +56,14 @@
         {
             $type = $_POST['account_type'] == 'passenger' ? 1 : 0;
             $conn = $this->getConnection();
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            
+            $password = password_hash(mysqli_real_escape_string($conn, $_POST['password']), PASSWORD_DEFAULT);
+            $email = mysqli_real_escape_string($conn, $_POST['email']);
+            $name = mysqli_real_escape_string($conn, $_POST['name']);
+            $phone = mysqli_real_escape_string($conn, $_POST['phone']);
             $conn->begin_transaction();
             // mysqli_begin_transaction($conn);
             try {
-                $query = "INSERT INTO User (email, password, name, tel, account_type) VALUES ('".$_POST['email']."', '$password', '".$_POST['name']."', '".$_POST['phone']."' , '$type')";
+                $query = "INSERT INTO User (email, password, name, tel, account_type) VALUES ('$email', '$password', '$name', '$phone' , '$type')";
                 $result = mysqli_query($conn, $query);
                 $id = mysqli_insert_id($conn);
 
@@ -66,33 +73,49 @@
                 else{
                     $this->signupCompany($id,$conn);
                 }
-
                 $conn->commit();
-                header('Location: ../signin.php');
+                header("Location: ../signin.php");
             } catch (mysqli_sql_exception $exception) {
-                echo $exception;
                 $conn->rollback();
-                header('Location: ../signup.php');
             }
+            $_POST = array();
             $conn->close();
         }
 
 
         public function signupPassenger($id, $conn)
         {
-            $query = "INSERT INTO Passenger (id, photo, passport_img ) VALUES ('$id' , '".$_POST['photo']."', '".$_POST['passenger-passport']."')";
-            $result = mysqli_query($conn, $query);
-
+            $photo = mysqli_real_escape_string($conn, $_POST['photo']);
+            $passport = mysqli_real_escape_string($conn, $_POST['passenger-passport']);
+            if($photo != '' && $passport != '')
+            {
+                $query = "INSERT INTO Passenger (id, photo, passport_img ) VALUES ('$id' , '$photo', '$passport')";
+                $result = mysqli_query($conn, $query);
+            }
+            else
+            {
+                echo "<script>alert('Please fill all the fields')</script>";
+                throw new mysqli_sql_exception("Please fill all the fields");
+            }
         }
 
 
         public function signupCompany($id , $conn)
         {
-            $query = "INSERT INTO Company (id, bio, address, location, logo ) VALUES ('$id' , '".$_POST['company-bio']."', '".$_POST['company-address']."', '".$_POST['company-location']."', '".$_POST['company-logo']."')";
-            $result = mysqli_query($conn, $query);
-
+            $bio = mysqli_real_escape_string($conn, $_POST['company-bio']);
+            $address = mysqli_real_escape_string($conn, $_POST['company-address']);
+            $logo = mysqli_real_escape_string($conn, $_POST['company-logo']);
+            $location = mysqli_real_escape_string($conn, $_POST['company-location']);
+            if($bio != '' && $address != '' && $logo != '')
+            {
+                $query = "INSERT INTO Company (id, bio, address, location, logo ) VALUES ('$id' , '$bio', '$address', '$location', '$logo')";
+                $result = mysqli_query($conn, $query);
+            }
+            else
+            {
+                echo "<script>alert('Please fill all the fields')</script>";
+                throw new mysqli_sql_exception("Please fill all the fields");
+            }
         }
-        
-
     }
 ?>

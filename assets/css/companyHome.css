@@ -1,0 +1,102 @@
+body {
+    background-image: url(../svg/test.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: sans-serif;
+    font-weight: 300;
+}
+
+header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 0rem 3rem;
+    border: #ff0000;
+    border-style: solid;
+    height: 15%;
+    width: 100%;
+    padding-top: 1rem;
+}
+#company-logo {
+    padding-top: 2rem;
+    border: #ff0000;
+    border-style: solid;
+}
+
+#profile-icon {
+    padding-top: 2rem;
+    margin-left: 20rem;
+    border: #ff0000;
+    border-style: solid;
+    height: 3rem;
+    width: 3rem;
+}
+
+#messages-icon {
+    padding-top: 2rem;
+    border: #ff0000;
+    border-style: solid;
+    height: 3rem;
+    width: 3rem;
+}
+
+.flight-list{
+    background-color: rgba(255, 255, 255, 0.692);
+    border: #ff0000;
+    border-style: solid;
+    height: 40rem;
+    width: 20rem;
+    margin: 0 auto;
+    margin-top: 2rem;
+}
+
+.flight-list ul{
+    list-style: none;
+    font-size: 0.9rem;
+    font-family: sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+.flight-list ul li{
+    padding: 0.5rem;
+    border-bottom: 1px solid #cccccc;
+}
+
+.flight-list ul li:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+.flight-list ul li:hover{
+    background-color: #003cff;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.flight-list ul li .flight-info{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0rem 1rem;
+}
+
+
+.flight-buttons {
+    margin-top: 35rem;
+    margin-left: 6.5rem;
+}
+
+
+.flight-button{
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.flight-button:hover{
+    background-color: #003cff;
+}

@@ -12,7 +12,6 @@
     require_once('classes/user.php');
     $user = new User();
     $user->signIn($_POST['email'], $_POST['password']);
-    
   }
 
 ?>
@@ -21,6 +20,8 @@
 <html>
   <head>
     <title>EgyptAir - Sign In</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png"/>
     <link rel="stylesheet" type="text/css" href="assets/css/form.css" />
   </head>
   <body>
