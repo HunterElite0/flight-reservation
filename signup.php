@@ -3,19 +3,26 @@
   session_start();
   if (isset($_SESSION['id'])) {
 
-    if($_SESSION['account_type'] == 'Passenger')
+    if($_SESSION['account_type'] == '1')
       header('Location: passengerHome.php');
-    else
+    else if($_SESSION['account_type'] == '0')
       header('Location: companyHome.php');
 
+    session_destroy();
   }
-    
-  else if($_SERVER["REQUEST_METHOD"] == "POST"){
+  else if(!empty($_POST)){
     require_once('classes/user.php');
     $user = new User();
-    $user->signup();
+    $request = $user->signup();
+    if($request){
+      header('Location: signin.php');
+    }
+    else{
+      echo '<script>alert("' . $request . '")</script>';
+    }
+    $_POST = array();
   }
-
+  
 ?>
 
 
@@ -63,6 +70,9 @@
         </div>
         <input type="submit" name="submit" value="Sign Up">
       </form>
+      <div class="form-footer">
+        <p>Already have an account? <a href="signin.php">Sign In</a></p>
+      </div>
     </div>
   </body>
 </html>

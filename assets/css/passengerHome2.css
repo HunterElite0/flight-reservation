@@ -68,7 +68,7 @@ body {
 
 .group-flights{
   padding: 2% 5% 2% 5%;
-  height: 70%;
+  height: 60%;
   display: grid;
   grid-template-columns: repeat( 2, 1fr );
   gap: 3em;
@@ -79,7 +79,7 @@ body {
   min-height: 20%;
   height: fit-content;
   border-radius: 30px;
-  background-color: rgba(137, 43, 226, 0.549);
+  background-color: rgba(137, 43, 226, 0.85);
 }
 
 .flights-info #info{
@@ -90,15 +90,22 @@ body {
 }
 
 #pending{
-  background-color: rgba(194, 55, 180, 0.671);
+  background-color: rgba(194, 55, 180, 0.85);
 }
 
-#flight-info{
-  background-color: rgba(169, 169, 169, 0.84);
+.box{
   margin-top: 2em;
   margin-bottom: 2em;
   margin-left: 1em;
   margin-right: 1em;
   padding: 1em;
-  border-radius: 30px;
+  border-radius: 35px;
+}
+
+#flight-info{
+  background-color: rgba(169, 169, 169, 0.85);
+}
+
+#city-info{
+  background-color: rgba(189, 201, 201, 0.85);
 }

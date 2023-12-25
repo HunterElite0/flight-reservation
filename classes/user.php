@@ -2,6 +2,7 @@
     require_once('connection.php');
     class user extends connection
     {
+        public $data = array();
 
         public function signIn($email, $password)
         {
@@ -10,45 +11,60 @@
             $password = mysqli_real_escape_string($conn, $password);
 
             if($email == '' || $password == '')
-                return;
+                return false;
 
-            $query = "SELECT * FROM User WHERE email = '$email'";
+            $query = "SELECT id,password,account_type FROM User WHERE email = '$email'";
             $result = mysqli_query($conn, $query);
             $resultArray = mysqli_fetch_assoc($result);
             $conn->close();
             
             if (mysqli_num_rows($result) == 1 && password_verify($password, $resultArray['password'])) {
-                foreach($resultArray as $key => $value)
-                {
-                    if($key != 'password' && $key != 'id')
-                        $_SESSION[$key] = $value;
-                }
-                if($resultArray['account_type'] == '0'){
-                    $this->setAccount($resultArray['id'], 'Company');
-                }else{
-                    $this->setAccount($resultArray['id'], 'Passenger');
-                }
-
+                $_SESSION['id'] = $resultArray['id'];
+                $_SESSION['account_type'] = $resultArray['account_type'];
+                // foreach($resultArray as $key => $value)
+                // {
+                //     if($key != 'password')
+                //         $_SESSION[$key] = $value;
+                // }
+                // if($resultArray['account_type'] == '0'){
+                //     $this->setAccount($resultArray['id'], 'Company');
+                // }else{
+                //     $this->setAccount($resultArray['id'], 'Passenger');
+                // }
+                return true;
             } else {
-                header("Location: ../signin.php");
-                echo "<script>alert('Invalid username or password')</script>";
+                return false;
+                // header("Location: ../signin.php");
+                // echo "<script>alert('Invalid username or password')</script>";
             }
         }
 
 
-        public function setAccount($id, $account_type)
+        public function setAccount()
         {
-            $_SESSION['account_type'] = $account_type;
+            $id = $_SESSION['id'];
+            $account_type = $_SESSION['account_type'] == '0' ? 'Company' : 'Passenger';
             $conn = $this->getConnection();
-            $query = "SELECT * FROM $account_type WHERE id = '$id' ";
+            $query = "SELECT * FROM $account_type where id = $id ";
             $result = mysqli_query($conn, $query);
-            $result = mysqli_fetch_assoc($result);
-            $conn->close();
-        
-            foreach($result as $key => $value)
+            $result1 = mysqli_fetch_assoc($result);
+            
+            foreach($result1 as $key => $value)
             {
-                $_SESSION[$key] = $value;
+                $this->data[$key] = $value;
             }
+
+            $query = "SELECT * FROM User where id = $id ";
+            $result = mysqli_query($conn, $query);
+            $result1 = mysqli_fetch_assoc($result);
+
+            foreach($result1 as $key => $value)
+            {
+                if($key != 'password')
+                    $this->data[$key] = $value;
+            }
+
+            $conn->close();
         }
 
 
@@ -74,18 +90,22 @@
                     $this->signupCompany($id,$conn);
                 }
                 $conn->commit();
-                header("Location: ../signin.php");
+                $conn->close();
+                return true;
             } catch (mysqli_sql_exception $exception) {
                 $conn->rollback();
+                $conn->close();
+                if($exception->getCode() == 1062)
+                    return "Error signing up, please try a different email.";
+                else
+                    return "Please fill all the fields.";
             }
-            $_POST = array();
-            $conn->close();
         }
 
 
         public function signupPassenger($id, $conn)
         {
-            $photo = mysqli_real_escape_string($conn, $_POST['photo']);
+            $photo = mysqli_real_escape_string($conn, $_POST['passenger-photo']);
             $passport = mysqli_real_escape_string($conn, $_POST['passenger-passport']);
             if($photo != '' && $passport != '')
             {
@@ -94,8 +114,7 @@
             }
             else
             {
-                echo "<script>alert('Please fill all the fields')</script>";
-                throw new mysqli_sql_exception("Please fill all the fields");
+                throw new mysqli_sql_exception;
             }
         }
 
@@ -113,9 +132,58 @@
             }
             else
             {
-                echo "<script>alert('Please fill all the fields')</script>";
-                throw new mysqli_sql_exception("Please fill all the fields");
+                throw new mysqli_sql_exception;
             }
         }
+
+        public function updatePassenger(){
+            $conn = $this->getConnection();
+
+            $id = $_SESSION['id'];
+            $name = mysqli_real_escape_string($conn, $_POST['name']);
+            $email = mysqli_real_escape_string($conn, $_POST['email']);
+            $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+            $password = mysqli_real_escape_string($conn, $_POST['password']);
+            $photo = mysqli_real_escape_string($conn, $_POST['passenger-photo']);
+            $passport = mysqli_real_escape_string($conn, $_POST['passenger-passport']);
+
+            if($name != '' && $email != '' && $phone != '' && $photo != '' && $passport != '')
+            {
+                if($password != '')
+                {
+                    $password = password_hash($password, PASSWORD_DEFAULT);
+                    $query = "UPDATE User SET name = '$name', email = '$email', tel = '$phone', password = '$password' WHERE id = '$id'";
+                }
+                else
+                {
+                    $query = "UPDATE User SET name = '$name', email = '$email', tel = '$phone' WHERE id = ".$_SESSION['id'];
+                }
+                $query1 = "UPDATE Passenger SET photo = '$photo', passport_img = '$passport' WHERE id = '$id'";
+                $result = mysqli_query($conn, $query);
+                if($result){
+                	$result1 = mysqli_query($conn, $query1);
+
+                    $conn->close();
+                    if($result1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else{
+                    $conn->close();
+                    return false;
+                }
+            }
+            else
+            {
+                $conn->close();
+                throw new mysqli_sql_exception;
+            }
+        }
+
     }
 ?>

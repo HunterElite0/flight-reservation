@@ -56,50 +56,10 @@ header {
 
 #flights-header{
     margin: 0 auto;
-    margin-top: 2rem;
+    margin-top: 0.4rem;
     width: fit-content;
     font-size: 2rem;
 }
-
-/* .flight-list{
-    background-color: #ffffff;
-    border: 10px solid #cccccc;
-    border-radius: 10px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    height: 40rem;
-    width: 20rem;
-    margin: 0 auto;
-    margin-top: 2rem;
-}
-
-.flight-list ul{
-    list-style: none;
-    font-size: 0.9rem;
-    font-family: sans-serif;
-    padding: 0;
-    margin: 0;
-}
-
-.flight-list ul li{
-    padding: 0.5rem;
-    border-bottom: 1px solid #cccccc;
-}
-
-.flight-list ul li:nth-child(even){
-    background-color: #f2f2f2;
-}
-
-.flight-list ul li:hover{
-    background-color: #003cff;
-    color: #ffffff;
-    cursor: pointer;
-}
-
-.flight-list ul li .flight-info{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 0rem 1rem;
-} */
 
 .wrapper {
     background-color: #ffffff;
@@ -114,7 +74,8 @@ header {
 
 ul {
     list-style: none;
-	padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+    margin: 0;
+	padding: 0.3rem 1.5rem 1.5rem 1.5rem;
 	columns: 25rem;
 	column-gap: 7rem;
 	column-rule: 4px dotted turquoise;
@@ -124,6 +85,8 @@ ul {
 ul a {
     text-decoration: none;
     color: #000000;
+    break-inside: avoid;
+    padding: 0.6rem;
 }
 
 ul > * + * {
@@ -177,4 +140,113 @@ li span:last-child {
 
 .flight-button:hover{
     background-color: #003cff;
+}
+
+.form-popup {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 10px;
+    z-index: 9;
+    text-align: center;
+}
+
+.form-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+}
+
+.form-header {
+    margin-bottom: 20px;
+}
+
+.form-header h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+.form-class {
+    width: 300px;
+}
+
+.form-class textarea,
+.form-class input[type="tel"],
+.form-class input[type="email"],
+.form-class input[type="text"],
+.form-class input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-family: sans-serif;
+    resize: vertical
+}
+
+.form-class input[type="radio"] {
+    margin-right: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+button,
+.form-class input[type="submit"] {
+    background-color: #8800ff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.cancel {
+    background-color: red;
+}
+
+button:hover,
+.form-class input[type="submit"]:hover {
+    background-color: #84016c;
+}
+
+.form-container::before {
+    content: "";
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    z-index: -1;
+}
+
+.form-class .form-group {
+    position: relative;
+}
+
+.form-class .form-group label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    color: #999;
+    font-size: 14px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.form-class input:focus+label,
+.form-class input:valid+label {
+    top: -15px;
+    transform: scale(0.8);
+    color: #333;
 }

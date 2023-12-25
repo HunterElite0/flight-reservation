@@ -1,17 +1,26 @@
 <?php
 
-  session_start();
+session_start();
+require_once('classes/user.php');
+
   if (isset($_SESSION['id'])) {
-    if($_SESSION['account_type'] == 'Passenger')
+    // echo '<pre>';
+    //   var_dump($_SESSION);
+    // echo '</pre>';
+    if($_SESSION['account_type'] == '1')
       header('Location: passengerHome.php');
-    else
+    else if($_SESSION['account_type'] == '0')
       header('Location: companyHome.php');
   }
   
   else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require_once('classes/user.php');
     $user = new User();
-    $user->signIn($_POST['email'], $_POST['password']);
+    if($user->signIn($_POST['email'], $_POST['password']) == true){
+      header('Location: signin.php');
+    }else{
+      echo "<script>alert('Invalid username or password')</script>";
+      echo "<script> $('.form-class')[0].reset(); </script>"; 
+    }
   }
 
 ?>
@@ -39,7 +48,7 @@
             required
           />
         </div>
-        <input type="submit" name="submit" value="submit" />
+        <input type="submit" name="submit" value="Submit" />
       </form>
       <p>New user? <a href="signup.php">Create an account</a></p>
     </div>

@@ -13,13 +13,17 @@ body {
     background-position: center;
 }
 
-body {
-    
-  }
 
 a{
     text-decoration: none;
     color: #007bff;
+}
+
+img{
+    border-radius: 50%;
+    width: 10em;
+    height: 10em;
+    margin-bottom: 1em;
 }
 
 .form-container {
@@ -58,15 +62,15 @@ a{
     resize: vertical
 }
 
-
 .form-class input[type="radio"] {
     margin-right: 5px;
     padding: 10px;
     margin-bottom: 20px;
 }
 
+button,
 .form-class input[type="submit"] {
-    background-color: #007bff;
+    background-color: #8800ff;
     /* Primary blue color */
     color: #fff;
     padding: 10px 20px;
@@ -76,8 +80,9 @@ a{
     font-size: 16px;
 }
 
+button:hover,
 .form-class input[type="submit"]:hover {
-    background-color: #0062cc;
+    background-color: #84016c;
     /* Darker shade on hover */
 }
 
