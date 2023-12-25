@@ -28,7 +28,7 @@ img{
 
 .form-container {
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 35px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     padding: 30px;
     text-align: center;
@@ -47,6 +47,7 @@ img{
     width: 300px;
 }
 
+select,
 .form-class textarea,
 .form-class input[type="tel"],
 .form-class input[type="email"],
@@ -118,4 +119,9 @@ button:hover,
     top: -15px;
     transform: scale(0.8);
     color: #333;
+}
+
+
+#left{
+    color : #000;
 }
