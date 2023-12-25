@@ -6,8 +6,8 @@
     header('Location: signin.php');
   }
 
-  if($_SESSION['account_type'] != '1'){
-    header('Location: companyProfile.php');
+  if($_SESSION['account_type'] != '0'){
+    header('Location: passengerProfile.php');
   }
 
   require_once('classes/user.php');
@@ -15,8 +15,8 @@
   $user->setAccount();
 
   if(isset($_POST['submit'])){
-    if($user->updatePassenger()){
-      header('Location: passengerHome.php');
+    if($user->updateCompany()){
+      header('Location: companyHome.php');
     }
     echo "<script>alert('Invalid data')</script>";
   }
@@ -34,7 +34,7 @@
 <body>
   <div class="form-container">
     <h1 class="form-header">Profile</h1>
-    <img id="pic" src= <?php echo "'".$user->data['photo']."'" ?> >
+    <img id="pic" src= <?php echo "'".$user->data['logo']."'" ?> >
     <form class="form-class" action="passengerProfile.php" method="POST" >
       <div class="form-group">
         <input type="text" id="name" name="name" placeholder="Name" required <?php echo "value='".$user->data['name']."'" ?> />
@@ -48,12 +48,14 @@
       <div class="form-group">
         <input type="password" id="password" name="password" placeholder="Password" />
       </div>
-      <div id="passenger-div" class="form-group">
-        <input type="text" id="passenger-photo" name="passenger-photo" placeholder="Link to Passenger Photo" oninput="updatePhoto()" <?php echo "value='".$user->data['photo']."'" ?> />
-        <input type="text" id="passnger-passport" name="passenger-passport" placeholder="Link to Passenger Passport" <?php echo "value='".$user->data['passport_img']."'" ?> />
-      </div>
+      <div id="company-div" class="form-group">
+          <textarea id="company-bio" name="company-bio" placeholder="Enter your company's bio" required > <?php echo $user->data['bio'] ?> </textarea>
+          <input type="text" id="company-address" name="company-address" placeholder="Company Address" required  <?php echo "value='".$user->data['address']."'" ?> />
+          <input type="text" id="company-location" name="company-location" placeholder="Company Location" required <?php echo "value='".$user->data['location']."'" ?>  />
+          <input type="text" id="company-logo" name="company-logo" placeholder="Company Logo" required  <?php echo "value='".$user->data['logo']."'" ?> />
+        </div>
       <input type="submit" name="submit" value="Update">
-      <button type="button" onclick="window.location.href='passengerHome.php'">back</button>
+      <button type="button" onclick="window.location.href='companyHome.php'">back</button>
     </form>
   </div>
 </body>

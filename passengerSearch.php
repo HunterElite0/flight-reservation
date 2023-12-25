@@ -1,5 +1,14 @@
-
 <?php
+session_start();
+
+
+if(!isset($_SESSION['id'])){
+  header('Location: signin.php');
+}
+
+if($_SESSION['account_type'] == 'Company' || $_SESSION['account_type'] == '0'){
+  header('Location: companyHome.php');
+}
 
 require_once('classes/city.php');
 $city = new city();
@@ -19,10 +28,10 @@ function displayResults(){
 
         require_once('classes/flight.php');
         $flight = new Flight();
-        $flights = $flight->getFlightsFromTo();
+        $flights = $flight->getFlightsFromTo($_SESSION['id']);
 
         foreach($flights as $flight){
-          echo " <a href=flightDetails.php?flight_id=".$flight['id']."> <div class='box' id='flight-info'> ";
+          echo " <a href=passengerFlightDetails.php?flight_id=".$flight['id']."&f_from=".$_GET['from']."&f_to=".$_GET['to']."> <div class='box' id='flight-info'> ";
           foreach($flight as $key => $val){
             echo "<label id='left'>". $key.": ".$val."</label> <br>";
           }

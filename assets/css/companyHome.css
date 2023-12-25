@@ -20,8 +20,10 @@ header {
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     background-color: #ffffffe8;
 }
+
 #company-logo {
-    padding-top: 2rem;
+    width: 10em;
+    height: 6em;
 }
 
 #profile-icon {
@@ -67,7 +69,7 @@ header {
     border-radius: 35px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     height: 40rem;
-    width: 20rem;
+    width: 30rem;
     margin: 0 auto;
     margin-top: 2rem;
 }
@@ -155,6 +157,7 @@ li span:last-child {
     border-radius: 10px;
     z-index: 9;
     text-align: center;
+    padding: 4rem;
 }
 
 .form-container {
@@ -176,15 +179,17 @@ li span:last-child {
 
 .form-class {
     padding-top: 10%;
-    width: 300px;
+    width: 40rem;
 }
 
 .form-class textarea,
 .form-class input[type="tel"],
 .form-class input[type="email"],
 .form-class input[type="text"],
-.form-class input[type="password"] {
-    width: 90%;
+.form-class input[type="password"],
+.form-class input[type="number"],
+.form-class input[type="datetime-local"] {
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -192,16 +197,6 @@ li span:last-child {
     font-size: 16px;
     font-family: sans-serif;
     resize: vertical
-}
-
-.form-class input[type="number"] {
-    width: 90%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-family: sans-serif;
 }
 
 .form-class input[type="radio"] {
@@ -246,20 +241,28 @@ button:hover,
     position: relative;
 }
 
-.form-class .form-group label {
+/* .form-class .form-group label {
     position: absolute;
     top: 10px;
     left: 0;
     color: #999;
     font-size: 14px;
     transition: transform 0.3s ease-in-out;
-}
+} */
 
 .form-class input:focus+label,
 .form-class input:valid+label {
     top: -15px;
     transform: scale(0.8);
     color: #333;
+}
+
+.form-group-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 0.4rem;
+    margin: 0 auto;
+    margin: 1rem;
 }
 
 #main.active {
@@ -271,4 +274,11 @@ button:hover,
     top:50%;
     left:52.5%;
     transform:translate(-50%, -50%) scale(1);
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    margin: 1rem;
 }

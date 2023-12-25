@@ -185,5 +185,57 @@
             }
         }
 
+
+        public function updateCompany(){
+            $conn = $this->getConnection();
+
+            $id = $_SESSION['id'];
+            $name = mysqli_real_escape_string($conn, $_POST['name']);
+            $email = mysqli_real_escape_string($conn, $_POST['email']);
+            $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+            $password = mysqli_real_escape_string($conn, $_POST['password']);
+            $bio = mysqli_real_escape_string($conn, $_POST['company-bio']);
+            $address = mysqli_real_escape_string($conn, $_POST['company-address']);
+            $logo = mysqli_real_escape_string($conn, $_POST['company-logo']);
+            $location = mysqli_real_escape_string($conn, $_POST['company-location']);
+
+            if($name != '' && $email != '' && $phone != '' && $bio != '' && $address != '' && $logo != '' && $location != '')
+            {
+                if($password != '')
+                {
+                    $password = password_hash($password, PASSWORD_DEFAULT);
+                    $query = "UPDATE User SET name = '$name', email = '$email', tel = '$phone', password = '$password' WHERE id = '$id'";
+                }
+                else
+                {
+                    $query = "UPDATE User SET name = '$name', email = '$email', tel = '$phone' WHERE id = ".$_SESSION['id'];
+                }
+                $query1 = "UPDATE Company SET bio = '$bio', address = '$address', location = '$location', logo = '$logo' WHERE id = '$id'";
+                $result = mysqli_query($conn, $query);
+                if($result){
+                	$result1 = mysqli_query($conn, $query1);
+
+                    $conn->close();
+                    if($result1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else{
+                    $conn->close();
+                    return false;
+                }
+            }
+            else
+            {
+                $conn->close();
+                throw new mysqli_sql_exception;
+            }
+        }
+
     }
 ?>
