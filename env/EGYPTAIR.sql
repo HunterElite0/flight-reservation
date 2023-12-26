@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Dec 24, 2023 at 10:18 PM
+-- Generation Time: Dec 26, 2023 at 06:03 PM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.8
 
@@ -31,6 +31,23 @@ CREATE TABLE `City` (
   `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `City`
+--
+
+INSERT INTO `City` (`name`) VALUES
+('Cairo'),
+('Canada'),
+('Iraq'),
+('KL'),
+('KSA'),
+('Kuwait'),
+('LA'),
+('Malaysia'),
+('Paris'),
+('Shibuya'),
+('UAE');
+
 -- --------------------------------------------------------
 
 --
@@ -50,8 +67,8 @@ CREATE TABLE `Company` (
 --
 
 INSERT INTO `Company` (`id`, `bio`, `address`, `location`, `logo`) VALUES
-(36, '', '', '', ''),
-(37, '', '', '', '');
+(134, 'lol', 'lol', 'lol', 'https://www.egyptair.com/Style%20Library/Images/egyptairmainlogo.png'),
+(135, 'best comp ever', 'Cairo, Mokattam, street 33, building 36', 'Cairo University', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.sHWnRfYN1Y-T5LmU5wk3xwHaGM%26pid%3DApi&f=1&ipt=59269e8f68e0ffa3143a6e90ee24dd929f6dd303a3cb17443eb840de63bd8ed7&ipo=images');
 
 -- --------------------------------------------------------
 
@@ -61,13 +78,21 @@ INSERT INTO `Company` (`id`, `bio`, `address`, `location`, `logo`) VALUES
 
 CREATE TABLE `Flight` (
   `id` int NOT NULL,
-  `name` int NOT NULL,
+  `name` varchar(255) NOT NULL,
   `fees` decimal(10,0) NOT NULL,
   `complete` tinyint(1) NOT NULL,
   `pending_passengers` int NOT NULL,
   `registered_passengers` int NOT NULL,
   `company_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Flight`
+--
+
+INSERT INTO `Flight` (`id`, `name`, `fees`, `complete`, `pending_passengers`, `registered_passengers`, `company_id`) VALUES
+(1, 'test', 100, 0, 2, 3, 134),
+(12, 'test2', 100, 0, 4, 6, 134);
 
 -- --------------------------------------------------------
 
@@ -83,6 +108,40 @@ CREATE TABLE `Flight_City` (
   `end_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `Flight_City`
+--
+
+INSERT INTO `Flight_City` (`flight_id`, `city_name`, `flight_order`, `start_time`, `end_time`) VALUES
+(1, 'Cairo', 1, '2020-01-01 00:00:00', '2021-01-01 00:00:00'),
+(12, 'Canada', 1, '2020-01-01 00:00:00', '2021-01-01 00:00:00'),
+(12, 'Iraq', 2, '2020-01-01 00:00:00', '2021-01-01 00:00:00'),
+(12, 'KSA', 3, '2020-01-01 00:00:00', '2021-01-01 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Messages`
+--
+
+CREATE TABLE `Messages` (
+  `m_from` int NOT NULL,
+  `m_to` int NOT NULL,
+  `message` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Messages`
+--
+
+INSERT INTO `Messages` (`m_from`, `m_to`, `message`) VALUES
+(122, 134, '123123'),
+(122, 134, '12312311111111'),
+(122, 134, '11111111111111111111111'),
+(134, 122, 'testerrrrrrr'),
+(122, 135, 'cmon man'),
+(122, 135, 'cmon ma2222222n');
+
 -- --------------------------------------------------------
 
 --
@@ -93,8 +152,16 @@ CREATE TABLE `Passenger` (
   `id` int NOT NULL,
   `photo` text NOT NULL,
   `passport_img` text NOT NULL,
-  `flights` int NOT NULL
+  `balance` float NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Passenger`
+--
+
+INSERT INTO `Passenger` (`id`, `photo`, `passport_img`, `balance`) VALUES
+(113, 'lol', 'lol', 0),
+(122, 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.pb-GW96sflZiGPmP7RVpXQHaEo%26pid%3DApi%26h%3D160&f=1&ipt=cf86949fc11a700ed83710c4110ec5bead7952ed67325043c3bfc4990f2175da&ipo=images', '123', -300);
 
 -- --------------------------------------------------------
 
@@ -104,8 +171,18 @@ CREATE TABLE `Passenger` (
 
 CREATE TABLE `Passenger_Flight` (
   `flight_id` int NOT NULL,
-  `passenger_id` int NOT NULL
+  `passenger_id` int NOT NULL,
+  `f_from` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `f_to` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Passenger_Flight`
+--
+
+INSERT INTO `Passenger_Flight` (`flight_id`, `passenger_id`, `f_from`, `f_to`) VALUES
+(1, 122, '0', ''),
+(12, 122, 'Canada', 'KSA');
 
 -- --------------------------------------------------------
 
@@ -127,8 +204,10 @@ CREATE TABLE `User` (
 --
 
 INSERT INTO `User` (`id`, `name`, `email`, `password`, `tel`, `account_type`) VALUES
-(36, 'Mostafa Hesham', 'mostafa777444333@gmail.com', '$2y$10$qdqPej2y19xvLUQ4.HKtX.kzkr98c8YCgpf3zWVuLzGBxw9FhAw/O', '+201032126278', 0),
-(37, 'Mostafa Hesham111', 'mostafa777444333@gmail.com111', '$2y$10$IqL2X79YDtyuOPz6ZRCFYuG6NCV/OO3W5cFP9bGZ8/WP1gPBq79Tq', '+201032126278111', 0);
+(113, 'fares', 'lol@lol.com', '$2y$10$hBD7uJ/h1fZO5GXKEG2Xk.ZOsvaFGCu37O4jQghMG9bhD7Y58LmAS', '01211001101', 1),
+(122, 'Mostafa Hesham', 'mostafa777444333@gmail.com', '$2y$10$z.BXsIJHE0/yJHKduSRY9.mx5/BESnIw4C9ToY5aJdvdhuN0OtIeK', '+20103212621231', 1),
+(134, 'ea', 'ea@lol.com', '$2y$10$8PP2fUBtaCw7jSNSxsQpDu4J/T.UCpykma55c6X0mcfIRA6ZuYU46', '02', 0),
+(135, 'Mostafa Hesham', 'mostafa777444333@gmail', '$2y$10$Tmu4zfWx132VvSsUrCnyduELncq2o2YgxJDbo10KxpsDClqwUtP4y', '+201032126278111', 0);
 
 --
 -- Indexes for dumped tables
@@ -161,7 +240,15 @@ ALTER TABLE `Flight`
 ALTER TABLE `Flight_City`
   ADD PRIMARY KEY (`flight_id`,`city_name`,`flight_order`),
   ADD KEY `city_name` (`city_name`),
-  ADD KEY `flight_id` (`flight_id`);
+  ADD KEY `flight_id` (`flight_id`),
+  ADD KEY `flight_order` (`flight_order`);
+
+--
+-- Indexes for table `Messages`
+--
+ALTER TABLE `Messages`
+  ADD KEY `m_from` (`m_from`,`m_to`),
+  ADD KEY `m_to` (`m_to`);
 
 --
 -- Indexes for table `Passenger`
@@ -169,6 +256,15 @@ ALTER TABLE `Flight_City`
 ALTER TABLE `Passenger`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
+
+--
+-- Indexes for table `Passenger_Flight`
+--
+ALTER TABLE `Passenger_Flight`
+  ADD PRIMARY KEY (`flight_id`,`passenger_id`),
+  ADD KEY `Passenger_Flight_ibfk_2` (`passenger_id`),
+  ADD KEY `destination` (`f_from`),
+  ADD KEY `f_to` (`f_to`);
 
 --
 -- Indexes for table `User`
@@ -183,20 +279,20 @@ ALTER TABLE `User`
 --
 
 --
+-- AUTO_INCREMENT for table `Flight`
+--
+ALTER TABLE `Flight`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
 -- AUTO_INCREMENT for table `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `City`
---
-ALTER TABLE `City`
-  ADD CONSTRAINT `city_itinerary` FOREIGN KEY (`name`) REFERENCES `Flight_City` (`city_name`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `Company`
@@ -208,8 +304,21 @@ ALTER TABLE `Company`
 -- Constraints for table `Flight`
 --
 ALTER TABLE `Flight`
-  ADD CONSTRAINT `flight_company` FOREIGN KEY (`company_id`) REFERENCES `Company` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  ADD CONSTRAINT `flight_itinerary` FOREIGN KEY (`id`) REFERENCES `Flight_City` (`flight_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `flight_company` FOREIGN KEY (`company_id`) REFERENCES `Company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Flight_City`
+--
+ALTER TABLE `Flight_City`
+  ADD CONSTRAINT `city` FOREIGN KEY (`city_name`) REFERENCES `City` (`name`),
+  ADD CONSTRAINT `flight` FOREIGN KEY (`flight_id`) REFERENCES `Flight` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Messages`
+--
+ALTER TABLE `Messages`
+  ADD CONSTRAINT `Messages_ibfk_1` FOREIGN KEY (`m_from`) REFERENCES `User` (`id`),
+  ADD CONSTRAINT `Messages_ibfk_2` FOREIGN KEY (`m_to`) REFERENCES `User` (`id`);
 
 --
 -- Constraints for table `Passenger`
