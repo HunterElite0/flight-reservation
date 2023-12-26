@@ -2,57 +2,61 @@
 
 require_once('connection.php');
 
-class flight extends connection{
+class flight extends connection
+{
 
-    public function getPassengerFlights($passenger_id){
+    public function getPassengerFlights($passenger_id)
+    {
         $conn = $this->getConnection();
         $query = "SELECT * FROM Flight WHERE id IN (SELECT flight_id FROM Passenger_Flight WHERE passenger_id = $passenger_id)";
         $result = mysqli_query($conn, $query);
         $resultArray = array();
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             $resultArray[] = $row;
         }
-        
+
         $conn->close();
-        
-        foreach($resultArray as &$row ){
+
+        foreach ($resultArray as &$row) {
             $row['cities'] = $this->getFlightCities($row['id']);
         }
 
         return $resultArray;
     }
 
-    public function getCompanyFlights($company_id){
+    public function getCompanyFlights($company_id)
+    {
         $conn = $this->getConnection();
         $query = "SELECT * FROM Flight WHERE company_id = $company_id";
         $result = mysqli_query($conn, $query);
         $resultArray = array();
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             $resultArray[] = $row;
         }
-        
+
         $conn->close();
-        
-        foreach($resultArray as &$row ){
+
+        foreach ($resultArray as &$row) {
             $row['cities'] = $this->getFlightCities($row['id']);
         }
 
         return $resultArray;
     }
 
-    public function getFlightsFromTo($passenger_id){
+    public function getFlightsFromTo($passenger_id)
+    {
         $conn = $this->getConnection();
         $from = mysqli_real_escape_string($conn, $_GET['from']);
         $to = mysqli_real_escape_string($conn, $_GET['to']);
         $query = "SELECT * FROM Flight WHERE id IN (SELECT flight_id FROM Flight_City WHERE city_name = '$from') AND id IN (SELECT flight_id FROM Flight_City WHERE city_name = '$to') AND complete = 0 and pending_passengers > 0";
         $result = mysqli_query($conn, $query);
         $resultArray = array();
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             $resultArray[] = $row;
         }
-        
+
         $conn->close();
-        
+
         // foreach($resultArray as &$row ){
         //     $row['cities'] = $this->getFlightCities($row['id']);
         // }
@@ -60,13 +64,14 @@ class flight extends connection{
         return $resultArray;
     }
 
-    
-    private function getFlightCities($flight_id){
+
+    private function getFlightCities($flight_id)
+    {
         $conn = $this->getConnection();
         $query = "SELECT * FROM Flight_City WHERE flight_id = $flight_id";
         $result = mysqli_query($conn, $query);
         $resultArray = array();
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             $resultArray[] = $row;
         }
         $conn->close();
@@ -74,7 +79,8 @@ class flight extends connection{
     }
 
 
-    public function getFlight($flight_id){
+    public function getFlight($flight_id)
+    {
         $conn = $this->getConnection();
         $query = "SELECT * FROM Flight WHERE id = $flight_id";
         $result = mysqli_query($conn, $query);
@@ -87,43 +93,44 @@ class flight extends connection{
     }
 
 
-    public function reserveFlight($passenger_id){
+    public function reserveFlight($passenger_id)
+    {
         $flight_id = $_GET['flight_id'];
         $f_from = $_GET['f_from'];
         $f_to = $_GET['f_to'];
 
-        if(!$this->checkSeats($flight_id)){
+        if (!$this->checkSeats($flight_id)) {
             return false;
         }
 
         $conn = $this->getConnection();
         $conn->begin_transaction();
-        try{
+        try {
             $query = "INSERT INTO Passenger_Flight (passenger_id, flight_id,f_from,f_to) VALUES ($passenger_id, $flight_id, '$f_from', '$f_to')";
             $result = mysqli_query($conn, $query);
-    
-            if(!$result){
+
+            if (!$result) {
                 $conn->rollback();
                 return false;
             }
-    
+
             $query = "UPDATE Flight SET pending_passengers = pending_passengers - 1, registered_passengers=registered_passengers+1 WHERE id = $flight_id";
             $result = mysqli_query($conn, $query);
-    
-            if(!$result){
+
+            if (!$result) {
                 $conn->rollback();
                 return false;
             }
-    
-            if($_GET['payment-type'] == 'credit'){
+
+            if ($_GET['payment-type'] == 'credit') {
                 $query = "UPDATE Passenger SET balance = balance - (SELECT fees FROM Flight WHERE id = $flight_id) WHERE id = $passenger_id";
                 $result = mysqli_query($conn, $query);
-                if(!$result){
+                if (!$result) {
                     $conn->rollback();
                     return false;
                 }
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $conn->rollback();
             return false;
         }
@@ -134,7 +141,8 @@ class flight extends connection{
     }
 
 
-    private function checkSeats($flight_id){
+    private function checkSeats($flight_id)
+    {
         $conn = $this->getConnection();
         $query = "SELECT pending_passengers FROM Flight WHERE id = $flight_id";
         $result = mysqli_query($conn, $query);
@@ -144,10 +152,11 @@ class flight extends connection{
     }
 
 
-    public function addFlight($id){
+    public function addFlight($id)
+    {
         $conn = $this->getConnection();
 
-        $flight_name = mysqli_real_escape_string($conn, $_POST['flight-name']); 
+        $flight_name = mysqli_real_escape_string($conn, $_POST['flight-name']);
         $flight_fees = mysqli_real_escape_string($conn, $_POST['flight-fees']);
         $flight_seats = mysqli_real_escape_string($conn, $_POST['flight-seats']);
         $flight_departures = $_POST['flight-departure'];
@@ -158,7 +167,7 @@ class flight extends connection{
         $result = mysqli_query($conn, $query);
         $flight_id = mysqli_insert_id($conn);
 
-        for($i = 0; $i < count($flight_destinations); $i++){
+        for ($i = 0; $i < count($flight_destinations); $i++) {
             $flight_destination = mysqli_real_escape_string($conn, $flight_destinations[$i]);
 
             try {
@@ -174,31 +183,32 @@ class flight extends connection{
         $conn->close();
     }
 
-    public function removeFlight($flight_id){
+    public function removeFlight($flight_id)
+    {
         $conn = $this->getConnection();
 
         try {
             $query = "DELETE FROM Flight WHERE id = $flight_id";
             $result = mysqli_query($conn, $query);
-            if(!$result){
-                echo "<script>alert('Error: ".mysqli_error($conn)."')</script>";
+            if (!$result) {
+                echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
                 return false;
             }
             $query  = "UPDATE Passenger SET balance = balance + (SELECT fees FROM Flight WHERE id = '$flight_id') WHERE id IN (SELECT passenger_id FROM Passenger_Flight WHERE flight_id = '$flight_id')";
             $result = mysqli_query($conn, $query);
-            if(!$result){
-                echo "<script>alert('Error: ".mysqli_error($conn)."')</script>";
+            if (!$result) {
+                echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
                 return false;
             }
             $query = "DELETE FROM Passenger_Flight WHERE flight_id = $flight_id";
             $result = mysqli_query($conn, $query);
-            if(!$result){
-                echo "<script>alert('Error: ".mysqli_error($conn)."')</script>";
+            if (!$result) {
+                echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
                 return false;
             }
             return true;
         } catch (mysqli_sql_exception $exception) {
-            echo "<script>alert('Error: ".mysqli_error($conn)."')</script>";
+            echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
             return false;
         }
 
@@ -207,9 +217,4 @@ class flight extends connection{
         $conn->close();
         return true;
     }
-
 }
-
-
-
-?>

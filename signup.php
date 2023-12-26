@@ -1,28 +1,26 @@
 <?php
 
-  session_start();
-  if (isset($_SESSION['id'])) {
+session_start();
+if (isset($_SESSION['id'])) {
 
-    if($_SESSION['account_type'] == '1')
-      header('Location: passengerHome.php');
-    else if($_SESSION['account_type'] == '0')
-      header('Location: companyHome.php');
+  if ($_SESSION['account_type'] == '1')
+    header('Location: passengerHome.php');
+  else if ($_SESSION['account_type'] == '0')
+    header('Location: companyHome.php');
 
-    session_destroy();
+  session_destroy();
+} else if (!empty($_POST)) {
+  require_once('classes/user.php');
+  $user = new User();
+  $request = $user->signup();
+  if ($request) {
+    header('Location: signin.php');
+  } else {
+    echo '<script>alert("' . $request . '")</script>';
   }
-  else if(!empty($_POST)){
-    require_once('classes/user.php');
-    $user = new User();
-    $request = $user->signup();
-    if($request){
-      header('Location: signin.php');
-    }
-    else{
-      echo '<script>alert("' . $request . '")</script>';
-    }
-    $_POST = array();
-  }
-  
+  $_POST = array();
+}
+
 ?>
 
 
@@ -30,14 +28,15 @@
   <meta charset="UTF-8" />
   <title>EgyptAir - Sign Up</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png"/>
+  <link rel="shortcut icon" type="image/icon" href="assets/logo/favicon.png" />
   <link rel="stylesheet" type="text/css" href="assets/css/form.css" />
   <script src="assets/js/signup.js"></script>
 </head>
+
 <body>
   <div class="form-container">
     <h1 class="form-header">Sign Up</h1>
-    <form class="form-class" action="signup.php" method="POST" >
+    <form class="form-class" action="signup.php" method="POST">
       <div class="form-group">
         <input type="text" id="name" name="name" placeholder="Name" required />
       </div>
@@ -73,4 +72,3 @@
     </div>
   </div>
 </body>
-
