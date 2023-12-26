@@ -188,27 +188,27 @@ class flight extends connection
         $conn = $this->getConnection();
 
         try {
-            $query = "DELETE FROM Flight WHERE id = $flight_id";
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
-                return false;
-            }
-            $query  = "UPDATE Passenger SET balance = balance + (SELECT fees FROM Flight WHERE id = '$flight_id') WHERE id IN (SELECT passenger_id FROM Passenger_Flight WHERE flight_id = '$flight_id')";
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
-                return false;
-            }
+            $conn->begin_transaction();
+
+
+            $query  = "UPDATE Passenger
+            JOIN Passenger_Flight ON Passenger.id = Passenger_Flight.passenger_id
+            JOIN Flight ON Flight.id = Passenger_Flight.flight_id
+            SET Passenger.balance = Passenger.balance + Flight.fees
+            WHERE Flight.id = $flight_id";
+            mysqli_query($conn, $query);
+
             $query = "DELETE FROM Passenger_Flight WHERE flight_id = $flight_id";
-            $result = mysqli_query($conn, $query);
-            if (!$result) {
-                echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
-                return false;
-            }
+            mysqli_query($conn, $query);
+
+            $query = "DELETE FROM Flight WHERE id = $flight_id";
+            mysqli_query($conn, $query);
+
+            $conn->commit();
             return true;
-        } catch (mysqli_sql_exception $exception) {
-            echo "<script>alert('Error: " . mysqli_error($conn) . "')</script>";
+        } catch (mysqli_sql_exception $e) {
+            echo "<script>alert('Error: " . $e->getMessage() . "')</script>";
+            $conn->rollback();
             return false;
         }
 

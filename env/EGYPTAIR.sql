@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Dec 26, 2023 at 06:03 PM
+-- Generation Time: Dec 26, 2023 at 08:31 PM
 -- Server version: 8.2.0
 -- PHP Version: 8.2.8
 
@@ -160,8 +160,8 @@ CREATE TABLE `Passenger` (
 --
 
 INSERT INTO `Passenger` (`id`, `photo`, `passport_img`, `balance`) VALUES
-(113, 'lol', 'lol', 0),
-(122, 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.pb-GW96sflZiGPmP7RVpXQHaEo%26pid%3DApi%26h%3D160&f=1&ipt=cf86949fc11a700ed83710c4110ec5bead7952ed67325043c3bfc4990f2175da&ipo=images', '123', -300);
+(122, 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.pb-GW96sflZiGPmP7RVpXQHaEo%26pid%3DApi%26h%3D160&f=1&ipt=cf86949fc11a700ed83710c4110ec5bead7952ed67325043c3bfc4990f2175da&ipo=images', '123', -300),
+(136, 'ss', 'ss', 0);
 
 -- --------------------------------------------------------
 
@@ -204,10 +204,10 @@ CREATE TABLE `User` (
 --
 
 INSERT INTO `User` (`id`, `name`, `email`, `password`, `tel`, `account_type`) VALUES
-(113, 'fares', 'lol@lol.com', '$2y$10$hBD7uJ/h1fZO5GXKEG2Xk.ZOsvaFGCu37O4jQghMG9bhD7Y58LmAS', '01211001101', 1),
 (122, 'Mostafa Hesham', 'mostafa777444333@gmail.com', '$2y$10$z.BXsIJHE0/yJHKduSRY9.mx5/BESnIw4C9ToY5aJdvdhuN0OtIeK', '+20103212621231', 1),
 (134, 'ea', 'ea@lol.com', '$2y$10$8PP2fUBtaCw7jSNSxsQpDu4J/T.UCpykma55c6X0mcfIRA6ZuYU46', '02', 0),
-(135, 'Mostafa Hesham', 'mostafa777444333@gmail', '$2y$10$Tmu4zfWx132VvSsUrCnyduELncq2o2YgxJDbo10KxpsDClqwUtP4y', '+201032126278111', 0);
+(135, 'Mostafa Hesham', 'mostafa777444333@gmail', '$2y$10$Tmu4zfWx132VvSsUrCnyduELncq2o2YgxJDbo10KxpsDClqwUtP4y', '+201032126278111', 0),
+(136, 'fares', 'pop@lol.com', '$2y$10$EmmuXgh7oYgz4euDN7555.IeCbXKwg/A9TAQ2sRYOlJ1ehDbFSl3a', '012121', 1);
 
 --
 -- Indexes for dumped tables
@@ -282,13 +282,13 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT for table `Flight`
 --
 ALTER TABLE `Flight`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- Constraints for dumped tables
@@ -325,6 +325,12 @@ ALTER TABLE `Messages`
 --
 ALTER TABLE `Passenger`
   ADD CONSTRAINT `user_passenger` FOREIGN KEY (`id`) REFERENCES `User` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Passenger_Flight`
+--
+ALTER TABLE `Passenger_Flight`
+  ADD CONSTRAINT `flight_passenger` FOREIGN KEY (`flight_id`) REFERENCES `Flight` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
